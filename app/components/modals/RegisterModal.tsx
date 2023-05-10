@@ -13,11 +13,13 @@ import Heading from '../Heading';
 import Input from '../inputs/Input';
 import Button from '../Button';
 import { signIn } from 'next-auth/react';
+import useLoginModal from '@/app/hooks/useLoginModal';
 
 type Props = {}
 
 export default function RegisterModal({}: Props) {
   const registerModal = useRegisterModal();
+  const loginModal = useLoginModal();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -48,6 +50,12 @@ export default function RegisterModal({}: Props) {
         setIsLoading(false);
       })
   }
+
+  const toggle = useCallback(() => {
+    registerModal.onClose();
+    loginModal.onOpen();
+  }, [loginModal, registerModal]);
+
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Heading 
@@ -111,7 +119,7 @@ export default function RegisterModal({}: Props) {
             Already have an account?
           </div>
           <div
-            onClick={registerModal.onClose}
+            onClick={toggle}
             className="text-neutral-800 cursor-poiner hover:underline"
           >
             Log In

@@ -9,6 +9,7 @@ import MenuItem from './MenuItem';
 import useRegisterModal from '@/app/hooks/useRegisterModal';
 import useLoginModal from '@/app/hooks/useLoginModal';
 import { SafeUser } from '@/app/types';
+import useRentModal from '@/app/hooks/useRentModal';
 
 type Props = {
   currentUser?: SafeUser | null
@@ -16,17 +17,28 @@ type Props = {
 
 const UserMenu = ({ currentUser }: Props) => {
   const registerModal = useRegisterModal();
+  const rentModal = useRentModal();
   const loginModal = useLoginModal()
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value)
   }, []);
+
+  const onRent = useCallback(() => {
+    if (!currentUser) {
+      return loginModal.onOpen();
+    }
+
+    // Open Rent Modal
+    rentModal.onOpen();
+  }, [currentUser, loginModal, rentModal])
+
   return (
     <div className="relative">
       <div className="flex flex-row items-center gap-3">
         <div 
-          onClick={() => {}}
+          onClick={onRent}
           className="
             hidden
             md:block
@@ -105,8 +117,8 @@ const UserMenu = ({ currentUser }: Props) => {
                   label="My properties"
                 />
                 <MenuItem
-                  onClick={() => {}}
-                  label="Airbnb"
+                  onClick={rentModal.onOpen}
+                  label="Airbnb your home"
                 />
                 <hr />
                 <MenuItem

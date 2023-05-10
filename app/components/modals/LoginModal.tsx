@@ -58,6 +58,12 @@ export default function LoginModal({}: Props) {
       }
     })
   }
+
+  const toggle = useCallback(() => {
+    loginModal.onClose();
+    registerModal.onOpen();
+  }, [loginModal, registerModal]);
+
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Heading 
@@ -111,13 +117,13 @@ export default function LoginModal({}: Props) {
           className="flex flex-row justify-center items-center gap-2"
         >
           <div>
-            Already have an account?
+            First time using airbnb?
           </div>
           <div
-            onClick={loginModal.onClose}
+            onClick={toggle}
             className="text-neutral-800 cursor-poiner hover:underline"
           >
-            Log In
+            Create an Account
           </div>
         </div>
         
