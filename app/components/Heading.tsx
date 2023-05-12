@@ -3,7 +3,7 @@
 type Props = {
   title: string,
   subtitle?: string, 
-  center?: string
+  center?: boolean
 
 }
 
