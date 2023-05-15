@@ -1,7 +1,7 @@
 import prisma from "@/app/libs/prismadb";
 
 export interface IListingsParams {
-  userId?:string;
+  userId?: string;
   guestCount?: number;
   roomCount?: number;
   bathroomCount?: number;
@@ -15,18 +15,18 @@ export default async function getListings(
   params: IListingsParams
 ) {
   try {
-    const { 
-      userId, 
-      category,
-      guestCount,
+    const {
+      userId,
       roomCount, 
-      bathroomCount,
+      guestCount, 
+      bathroomCount, 
+      locationValue,
       startDate,
       endDate,
-      locationValue,
-     } = params;
+      category,
+    } = params;
 
-    let query: any = {}
+    let query: any = {};
 
     if (userId) {
       query.userId = userId;
@@ -39,19 +39,19 @@ export default async function getListings(
     if (roomCount) {
       query.roomCount = {
         gte: +roomCount
-      };
+      }
     }
 
     if (guestCount) {
       query.guestCount = {
         gte: +guestCount
-      };
+      }
     }
 
     if (bathroomCount) {
       query.bathroomCount = {
         gte: +bathroomCount
-      };
+      }
     }
 
     if (locationValue) {
@@ -60,11 +60,11 @@ export default async function getListings(
 
     if (startDate && endDate) {
       query.NOT = {
-        reservation: {
+        reservations: {
           some: {
             OR: [
               {
-                endDate: { gte: startDate},
+                endDate: { gte: startDate },
                 startDate: { lte: startDate }
               },
               {
@@ -83,13 +83,13 @@ export default async function getListings(
         createdAt: 'desc'
       }
     });
-    
+
     const safeListings = listings.map((listing) => ({
-      ... listing,
-      createdAt: listing.createdAt.toISOString()
+      ...listing,
+      createdAt: listing.createdAt.toISOString(),
     }));
 
-    return safeListings
+    return safeListings;
   } catch (error: any) {
     throw new Error(error);
   }
